@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Customers{% endblock %}
+{% block page_title %}Customers{% endblock %}
+{% block page_sub %}Manage buyer accounts and view their order history.{% endblock %}
+
+{% block topbar_right %}
+<div class="search-box">
+    <input id="searchInput" type="text" placeholder="Search by name, business, email, phone" />
+    <button class="btn-secondary" id="searchBtn">Search</button>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <p class="card-title" id="formTitle">Add Customer</p>
+    <p class="card-sub">Registered pharmacies, clinics, and retailers who order from you.</p>
+    <div class="form-grid">
+        <div>
+            <label for="name">Contact Name</label>
+            <input id="name" type="text" placeholder="Full name" />
+        </div>
+        <div>
+            <label for="businessName">Business Name</label>
+            <input id="businessName" type="text" placeholder="Pharmacy / clinic name" />
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="Email address" />
+        </div>
+        <div>
+            <label for="phone">Phone</label>
+            <input id="phone" type="text" placeholder="Contact number" />
+        </div>
+        <div>
+            <label for="gstNumber">GST Number</label>
+            <input id="gstNumber" type="text" placeholder="GSTIN" />
+        </div>
+        <div>
+            <label for="status">Status</label>
+            <select id="status">
+                <option value="active">Active</option>
+                <option value="blocked">Blocked</option>
+            </select>
+        </div>
+        <div style="grid-column: 1 / -1;">
+            <label for="address">Address</label>
+            <input id="address" type="text" placeholder="Business address" />
+        </div>
+    </div>
+    <div style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <button id="submitBtn" class="btn-primary">Add Customer</button>
+        <button id="cancelEditBtn" class="btn-secondary hidden">Cancel Edit</button>
+    </div>
+</div>
+
+<div class="card">
+    <p class="card-title">All Customers</p>
+    <p class="card-sub">Order totals update automatically from order history.</p>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Business</th>
+                    <th>Contact</th>
+                    <th>Orders</th>
+                    <th>Total Spent</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="customersBody">
+                <tr><td colspan="7" class="cell-muted">Loading customers…</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/customers.js') }}"></script>
+{% endblock %}

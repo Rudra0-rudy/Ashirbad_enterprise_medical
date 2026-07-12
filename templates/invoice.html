@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice AE-{{ order.order_no }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoice.css') }}">
+</head>
+<body>
+    <div class="invoice-toolbar">
+        <a class="btn-back" href="{{ url_for('orders_page') }}">&larr; Back to Orders</a>
+        <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+    <div class="invoice-sheet">
+        <div class="invoice-header">
+            <div>
+                <p class="company-name">Ashirbad Enterprise</p>
+                <p class="company-meta">
+                    160 N S Road, Nivedita Complex, Shop No. 11, Asansol – 713301<br>
+                    Call the desk: 9153866504 / 7908824752<br>
+                    Email: ashirbadenter24@gmail.com
+                </p>
+            </div>
+            <div class="invoice-tag">
+                <h2>INVOICE</h2>
+                <p>#AE-{{ order.order_no }}</p>
+            </div>
+        </div>
+
+        <div class="invoice-meta-grid">
+            <div class="meta-block">
+                <h4>Billed To</h4>
+                <p>
+                    {{ order.customer_name }}<br>
+                    {% if order.phone %}{{ order.phone }}<br>{% endif %}
+                    {% if order.address %}{{ order.address }}{% endif %}
+                </p>
+            </div>
+            <div class="meta-block">
+                <h4>Invoice Details</h4>
+                <p>
+                    Date: {{ order.created_at.strftime('%d %b %Y') if order.created_at else '-' }}<br>
+                    Payment status: {{ order.payment_status | default('unpaid') | capitalize }}<br>
+                    Order status: {{ order.status | default('pending') | capitalize }}
+                </p>
+            </div>
+        </div>
+
+        <table class="invoice-items">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Item</th>
+                    <th class="num">Qty</th>
+                    <th class="num">Unit Price</th>
+                    <th class="num">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order['items'] %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.name }}</td>
+                    <td class="num">{{ item.qty }}</td>
+                    <td class="num">₹{{ "%.2f"|format(item.price|float) }}</td>
+                    <td class="num">₹{{ "%.2f"|format((item.qty|float) * (item.price|float)) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="invoice-totals">
+            <div class="totals-box">
+                <div class="totals-row grand">
+                    <span>Total</span>
+                    <span>₹{{ "%.2f"|format(order.total|float) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <p class="amount-words">Amount in words: {{ amount_words }}</p>
+
+        {% if order.notes %}
+        <p class="amount-words">Notes: {{ order.notes }}</p>
+        {% endif %}
+
+        <div class="invoice-footer">
+            <div>This is a computer-generated invoice from Ashirbad Enterprise.</div>
+            <div class="signature-box">
+                <div class="signature-line">Authorized Signatory</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

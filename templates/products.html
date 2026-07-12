@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+{% block page_title %}Products{% endblock %}
+{% block page_sub %}Manage inventory, pricing, batches, and expiry.{% endblock %}
+
+{% block topbar_right %}
+<div class="search-box">
+    <input id="searchInput" type="text" placeholder="Search by name, brand, category, batch" />
+    <button class="btn-secondary" id="searchBtn">Search</button>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <p class="card-title" id="formTitle">Add Product</p>
+    <p class="card-sub">Fields marked with a name are required; everything else is optional.</p>
+    <div class="form-grid">
+        <div>
+            <label for="name">Name</label>
+            <input id="name" type="text" placeholder="Product name" />
+        </div>
+        <div>
+            <label for="brand">Brand</label>
+            <input id="brand" type="text" placeholder="Brand" />
+        </div>
+        <div>
+            <label for="category">Category</label>
+            <input id="category" type="text" placeholder="Category" />
+        </div>
+        <div>
+            <label for="price">Price</label>
+            <input id="price" type="number" min="0" step="0.01" placeholder="Price" />
+        </div>
+        <div>
+            <label for="mrp">MRP</label>
+            <input id="mrp" type="number" min="0" step="0.01" placeholder="MRP" />
+        </div>
+        <div>
+            <label for="stock">Stock</label>
+            <input id="stock" type="number" min="0" placeholder="Stock quantity" />
+        </div>
+        <div>
+            <label for="expiry">Expiry</label>
+            <input id="expiry" type="date" />
+        </div>
+        <div>
+            <label for="batch">Batch</label>
+            <input id="batch" type="text" placeholder="Batch number" />
+        </div>
+        <div style="grid-column: 1 / -1;">
+            <label for="description">Description</label>
+            <textarea id="description" placeholder="Product description"></textarea>
+        </div>
+        <div style="grid-column: 1 / -1;">
+            <label for="image">Image URL</label>
+            <input id="image" type="url" placeholder="https://example.com/image.jpg" />
+        </div>
+    </div>
+    <div style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <button id="submitBtn" class="btn-primary">Add Product</button>
+        <button id="cancelEditBtn" class="btn-secondary hidden">Cancel Edit</button>
+    </div>
+</div>
+
+<div class="products-grid" id="productsGrid">
+    <div class="empty-state"><p>&#9203;</p><p>Loading products…</p></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/products.js') }}"></script>
+{% endblock %}

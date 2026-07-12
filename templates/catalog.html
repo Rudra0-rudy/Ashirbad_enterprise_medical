@@ -1,0 +1,36 @@
+{% extends "shop_base.html" %}
+{% block title %}Full Catalog — Ashirbad Enterprise{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top:44px;">
+  <div class="wrap">
+    <a class="link-more" href="{{ url_for('shop_page') }}">&larr; Back to Home</a>
+
+    <div class="section-head reveal" style="margin-top:20px;">
+      <div>
+        <div class="eyebrow">Live Inventory</div>
+        <h3>Full Product Catalog</h3>
+        <p>Every item currently in stock at the Asansol depot — {{ total_skus }} SKUs and counting.</p>
+      </div>
+    </div>
+
+    <div class="field reveal" style="max-width:420px; margin-bottom:18px;">
+      <input id="catalogSearch" type="text" placeholder="Search medicines, brands...">
+    </div>
+
+    <div class="chip-row reveal" id="chipRow">
+      <button class="chip active" data-filter="">All Categories</button>
+    </div>
+
+    <div class="product-grid reveal" id="productGrid">
+      <p class="empty-note">Loading products…</p>
+    </div>
+
+    <p class="disclaimer-note">Prices shown are indicative wholesale rates and may vary with batch, GST and quantity — confirmed on quote.</p>
+  </div>
+</section>
+{% endblock %}
+
+{% block page_config %}
+<script>window.SHOP_CONFIG = { mode: "catalog" };</script>
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends "shop_base.html" %}
+{% block title %}Ashirbad Enterprise — Wholesale Medical Supplies, Asansol{% endblock %}
+
+{% block content %}
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">B2B Licensed Distributor · Asansol, West Bengal</div>
+      <h2>Genuine medicine, <em>dispensed</em> by the case.</h2>
+      <p class="lede">Ashirbad Enterprise supplies pharmacies, nursing homes and diagnostic centres with authentic pharmaceuticals, surgical consumables and cold-chain products — stocked, verified and dispatched from Asansol.</p>
+      <div class="hero-ctas">
+        <a href="#products" class="btn btn-primary">Browse Catalog</a>
+        <a href="#contact" class="btn btn-outline">Request Bulk Quote</a>
+      </div>
+      <div class="hero-contact-row">
+        <div class="item">
+          <div class="icon-dot"><svg class="icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><strong>Visit the warehouse</strong><span>160 N S Road, Nivedita Complex, Shop No. 11, Asansol – 713301</span></div>
+        </div>
+        <div class="item">
+          <div class="icon-dot"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><strong>Call the desk</strong><span>9153866504 / 7908824752</span></div>
+        </div>
+        <div class="item">
+          <div class="icon-dot"><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg></div>
+          <div><strong>Email procurement</strong><span>ashirbadenter24@gmail.com</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- signature "stock manifest" ticket card -->
+    <div class="manifest reveal">
+      <div class="manifest-head">
+        <div><b>Stock Manifest</b>Ashirbad Enterprise · Asansol Depot</div>
+        <div class="manifest-stamp">Verified</div>
+      </div>
+      <div class="manifest-photo">
+        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=900&auto=format&fit=crop" alt="Organized pharmaceutical stock">
+      </div>
+      <div class="manifest-tear"></div>
+      <div class="manifest-rows">
+        <div class="manifest-row"><span class="label">Active SKUs</span><span class="val">{{ total_skus }}</span></div>
+        <div class="manifest-row"><span class="label">Cold-chain dispatch</span><span class="val">24–48 hrs</span></div>
+        <div class="manifest-row"><span class="label">Serving since</span><span class="val">2004</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker-strip">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<!-- ============ PRODUCTS (preview only) ============ -->
+<section class="section" id="products">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Live Inventory</div>
+        <h3>Priority stock availability</h3>
+        <p>A quick look at what's on the shelf right now — see everything we carry in the full catalog.</p>
+      </div>
+      <a class="link-more" href="{{ url_for('catalog_page') }}">View full catalog →</a>
+    </div>
+
+    <div class="product-grid reveal" id="productGrid">
+      <p class="empty-note">Loading products…</p>
+    </div>
+
+    <p class="disclaimer-note">Prices shown are indicative wholesale rates and may vary with batch, GST and quantity — confirmed on quote.</p>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <div class="wrap about-grid reveal">
+    <div class="about-photo">
+      <img src="https://i.ibb.co/1tkKC0WG/Bimal-Acharjee.png" alt="Ashirbad Enterprise warehouse depot">
+    </div>
+    <div>
+      <div class="eyebrow">About Us</div>
+      <h3>Two decades of dependable wholesale supply</h3>
+      <p class="lede">Ashirbad Enterprise was founded in 2004 in Asansol with a simple mandate: give local pharmacies, nursing homes and diagnostic centres a supplier they never have to double-check. Two decades later, that's still the whole business — genuine stock, accurate counts, and orders that arrive when we say they will.</p>
+      <p>We're a licensed B2B distributor, not a marketplace. Every SKU that leaves our depot is sourced through verified channels, stored under proper conditions — including cold-chain — and tracked against a live ledger, so what you see listed is what's actually on the shelf.</p>
+
+      <div class="about-stats">
+        <div class="about-stat">
+          <span class="num">20+</span>
+          <span class="lbl">Years serving Asansol</span>
+        </div>
+        <div class="about-stat">
+          <span class="num">{{ total_skus }}</span>
+          <span class="lbl">Active SKUs stocked</span>
+        </div>
+        <div class="about-stat">
+          <span class="num">24–48h</span>
+          <span class="lbl">Cold-chain dispatch</span>
+        </div>
+        <div class="about-stat">
+          <span class="num">100%</span>
+          <span class="lbl">Licensed &amp; genuine stock</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADVANTAGE ============ -->
+<section class="advantage section" id="advantage">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Why Pharmacies Reorder From Us</div>
+        <h3>The Ashirbad advantage</h3>
+      </div>
+    </div>
+    <div class="advantage-grid reveal">
+      <div class="adv-card">
+        <div class="adv-icon"><svg class="icon" viewBox="0 0 24 24" stroke="white"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg></div>
+        <h4>Real-time stock counts</h4>
+        <p>No "out of stock" surprises — our depot ledger syncs live with what's actually on the shelf.</p>
+      </div>
+      <div class="adv-card">
+        <div class="adv-icon"><svg class="icon" viewBox="0 0 24 24" stroke="white"><path d="M10 17h4V5H2v12h3M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L18 8h-4v9h2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
+        <h4>24–48 hr cold-chain dispatch</h4>
+        <p>Intra-city delivery within a day, nationwide cold-chain fulfilment within two.</p>
+      </div>
+      <div class="adv-card">
+        <div class="adv-icon"><svg class="icon" viewBox="0 0 24 24" stroke="white"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4>Genuine stock, always</h4>
+        <p>Every batch is sourced and stored per licensing norms — nothing grey-market, nothing expired.</p>
+      </div>
+      <div class="adv-card">
+        <div class="adv-icon"><svg class="icon" viewBox="0 0 24 24" stroke="white"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></div>
+        <h4>Cash or Pay-Later</h4>
+        <p>Pay instantly via UPI, or place your order Cash on Delivery — no card or gateway needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ============ CTA ============ -->
+<section class="section" style="padding-top:0;">
+  <div class="cta-band reveal">
+    <h3>Order wholesale from Ashirbad Enterprise</h3>
+    <p>Pharmacies, nursing homes and diagnostic centres across the region source genuine medical supplies from our depot — browse the full catalog or message us directly.</p>
+    <div class="cta-buttons">
+      <a href="{{ url_for('catalog_page') }}" class="btn btn-primary">View Full Catalog</a>
+      <a href="https://wa.me/919153866504" target="_blank" rel="noopener" class="btn" style="border:1px solid var(--amber-soft); color:var(--amber-soft);">Message on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Get In Touch</div>
+        <h3>Visit, call or write to us</h3>
+      </div>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="address-slip">
+        <h4>Depot &amp; Contact Details</h4>
+        <div class="row">
+          <div class="icon-dot"><svg class="icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><strong>Address</strong><span>160 N S Road, Nivedita Complex, Shop No. 11, Asansol – 713301, West Bengal</span></div>
+        </div>
+        <div class="row">
+          <div class="icon-dot"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><strong>Phone</strong><a href="tel:+919153866504">9153866504</a> &nbsp;/&nbsp; <a href="tel:+917908824752">7908824752</a></div>
+        </div>
+        <div class="row">
+          <div class="icon-dot"><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg></div>
+          <div><strong>Email</strong><a href="mailto:ashirbadenter24@gmail.com">ashirbadenter24@gmail.com</a></div>
+        </div>
+        <div class="row">
+          <div class="icon-dot"><svg class="icon" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg></div>
+          <div><strong>Hours</strong><span>Mon–Sat, 9:30 AM – 8:00 PM</span></div>
+        </div>
+      </div>
+      <div class="map-frame">
+        <iframe src="https://www.google.com/maps?q=Nivedita+Complex,+N+S+Road,+Asansol,+713301&output=embed" loading="lazy" allowfullscreen title="Ashirbad Enterprise location"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block page_config %}
+<script>window.SHOP_CONFIG = { mode: "home", limit: 8, catalogUrl: "{{ url_for('catalog_page') }}" };</script>
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_sub %}A live snapshot of orders, payments, and stock.{% endblock %}
+
+{% block topbar_right %}
+<div class="quick-actions">
+    <a href="{{ url_for('orders_page') }}" class="btn btn-primary btn-sm">+ New Order</a>
+    <a href="{{ url_for('products_page') }}" class="btn btn-secondary btn-sm">+ Add Product</a>
+    <a href="{{ url_for('customers_page') }}" class="btn btn-secondary btn-sm">+ Add Client</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="stat-grid">
+    <div class="card stat-card tint-blue">
+        <p class="stat-label">Today's Orders</p>
+        <p class="stat-value" id="statTodayOrders">–</p>
+        <p class="stat-foot">Placed since midnight</p>
+    </div>
+    <div class="card stat-card tint-amber">
+        <p class="stat-label">Pending Payment</p>
+        <p class="stat-value" id="statPendingPayment">–</p>
+        <p class="stat-foot" id="statPendingPaymentFoot">–</p>
+    </div>
+    <div class="card stat-card tint-violet">
+        <p class="stat-label">Pending Orders</p>
+        <p class="stat-value" id="statPendingOrders">–</p>
+        <p class="stat-foot">Awaiting processing</p>
+    </div>
+    <div class="card stat-card tint-teal">
+        <p class="stat-label">Upcoming Orders</p>
+        <p class="stat-value" id="statUpcomingOrders">–</p>
+        <p class="stat-foot">Processing or shipped</p>
+    </div>
+</div>
+
+<div class="stat-grid">
+    <div class="card stat-card tint-blue">
+        <p class="stat-label">Total Revenue</p>
+        <p class="stat-value" id="statRevenue">–</p>
+        <p class="stat-foot">Across non-cancelled orders</p>
+    </div>
+    <div class="card stat-card tint-teal">
+        <p class="stat-label">Total Products</p>
+        <p class="stat-value" id="statProducts">–</p>
+        <p class="stat-foot">Active catalog items</p>
+    </div>
+    <div class="card stat-card tint-violet">
+        <p class="stat-label">Total Customers</p>
+        <p class="stat-value" id="statCustomers">–</p>
+        <p class="stat-foot">Registered buyers</p>
+    </div>
+    <div class="card stat-card tint-amber">
+        <p class="stat-label">Low Stock</p>
+        <p class="stat-value" id="statLowStock">–</p>
+        <p class="stat-foot">At 20 units or below</p>
+    </div>
+</div>
+
+<div class="card">
+    <p class="card-title">Pending Orders</p>
+    <p class="card-sub">Newly placed, not yet started. Click a row for full details.</p>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Payment</th>
+                    <th>Placed</th>
+                </tr>
+            </thead>
+            <tbody id="pendingOrdersBody">
+                <tr><td colspan="5" class="cell-muted">Loading…</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <p class="card-title">Upcoming Orders</p>
+    <p class="card-sub">Being processed or already shipped. Click a row for full details.</p>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Placed</th>
+                </tr>
+            </thead>
+            <tbody id="upcomingOrdersBody">
+                <tr><td colspan="5" class="cell-muted">Loading…</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <p class="card-title">Low Stock Watchlist</p>
+    <p class="card-sub">Products that may need restocking soon.</p>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Brand</th>
+                    <th>Stock</th>
+                    <th>Batch</th>
+                    <th>Expiry</th>
+                </tr>
+            </thead>
+            <tbody id="lowStockBody">
+                <tr><td colspan="5" class="cell-muted">Loading watchlist…</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- ============ ORDER DETAIL MODAL ============ -->
+<div class="modal-overlay" id="orderDetailOverlay">
+    <div class="modal">
+        <div class="modal-head">
+            <p class="card-title" id="detailOrderTitle">Order</p>
+            <button class="modal-close" id="detailCloseBtn">&times;</button>
+        </div>
+
+        <div class="detail-section">
+            <h4>Customer</h4>
+            <div class="detail-row"><span class="k">Name</span><span class="v" id="detailCustomerName">–</span></div>
+            <div class="detail-row"><span class="k">Phone</span><span class="v" id="detailPhone">–</span></div>
+            <div class="detail-row"><span class="k">Location / Address</span><span class="v" id="detailAddress">–</span></div>
+        </div>
+
+        <div class="detail-section">
+            <h4>Order Items</h4>
+            <table class="detail-items-table">
+                <thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead>
+                <tbody id="detailItemsBody"></tbody>
+            </table>
+            <div class="detail-row" style="margin-top:8px; border-top:1px dashed var(--border); padding-top:8px;">
+                <span class="k">Total</span><span class="v" id="detailTotal">–</span>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h4>Status &amp; Payment</h4>
+            <div class="form-grid">
+                <div>
+                    <label for="detailStatusSelect">Order Status</label>
+                    <select id="detailStatusSelect">
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="detailPaymentSelect">Payment Status</label>
+                    <select id="detailPaymentSelect">
+                        <option value="unpaid">Unpaid</option>
+                        <option value="paid">Paid</option>
+                        <option value="refunded">Refunded</option>
+                    </select>
+                </div>
+            </div>
+            <div class="detail-row" style="margin-top:8px;"><span class="k">Payment Method</span><span class="v" id="detailPaymentMethod">–</span></div>
+            <div class="detail-row"><span class="k">Order Channel</span><span class="v" id="detailSource">–</span></div>
+            <div class="detail-row"><span class="k">Placed</span><span class="v" id="detailCreatedAt">–</span></div>
+        </div>
+
+        <div class="detail-section" id="detailNotesSection">
+            <h4>Notes / Comments</h4>
+            <p class="cell-muted" id="detailNotes" style="margin:0; font-size:0.88rem;">–</p>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn-primary" id="detailSaveBtn">Save Changes</button>
+            <a class="btn-secondary" id="detailInvoiceLink" href="#" target="_blank" style="text-decoration:none; display:inline-flex; align-items:center;">View Invoice</a>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
