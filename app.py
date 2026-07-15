@@ -1,5 +1,5 @@
-from flask import Flask, render_template, abort, request, jsonify
 import os
+from flask import Flask, render_template, abort, request, jsonify, Response
 from flask_cors import CORS
 from bson import ObjectId
 from bson.errors import InvalidId
@@ -19,6 +19,45 @@ app.register_blueprint(product_bp)
 app.register_blueprint(order_bp)
 app.register_blueprint(customer_bp)
 app.register_blueprint(dashboard_bp)
+
+# -------------------------------------------------------------------
+# ADMIN AUTH
+# Protects the admin panel (dashboard/products/orders/customers pages
+# and their underlying write/list APIs) with a browser login prompt.
+# Left deliberately open: the storefront pages, product *browsing*
+# (GET), and order *creation* (POST) — customers need those to shop.
+# -------------------------------------------------------------------
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "changeme")
+
+PUBLIC_PAGE_PATHS = {"/", "/catalog"}
+
+
+def _is_public_request(path, method):
+    if path.startswith("/static/"):
+        return True
+    if path in PUBLIC_PAGE_PATHS:
+        return True
+    if method == "GET" and path.startswith("/api/products"):
+        return True
+    if method == "POST" and path == "/api/orders":
+        return True
+    return False
+
+
+@app.before_request
+def require_admin_auth():
+    if _is_public_request(request.path, request.method):
+        return None
+
+    auth = request.authorization
+    if not auth or auth.username != ADMIN_USERNAME or auth.password != ADMIN_PASSWORD:
+        return Response(
+            "Admin login required.",
+            401,
+            {"WWW-Authenticate": 'Basic realm="Ashirbad Admin"'},
+        )
+    return None
 
 
 @app.errorhandler(PyMongoError)
@@ -94,7 +133,6 @@ def invoice_page(id):
         order=order,
         amount_words=amount_in_words(order.get("total", 0)),
     )
-
 
 
 if __name__ == "__main__":
